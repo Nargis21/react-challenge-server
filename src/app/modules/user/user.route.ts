@@ -18,4 +18,23 @@ router.get(
   UserController.checkAdmin
 );
 
+router.get(
+  '/challenge',
+  auth(),
+  UserController.getAllUserChallenges
+)
+
+router.post(
+  '/challenge',
+  auth(),
+  validateRequest(UserValidation.UserChallengeZodSchema),
+  UserController.saveUserChallenge
+)
+
+router.get(
+  '/challenge/:id',
+  auth(),
+  UserController.getChallengeById
+)
+
 export const UserRoutes = router;

@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { Document, Model } from 'mongoose';
 
-type Challenge = {
+export type IUserChallenge = {
   challengeId: string,
   title: string,
   challengeCategory: string,
@@ -13,7 +13,7 @@ type Challenge = {
 export type IUser = Document & {
   email: string;
   role: 'user' | 'admin';
-  challenges: Challenge[]
+  challenges: IUserChallenge[]
 };
 
 export type IUserResponse = {

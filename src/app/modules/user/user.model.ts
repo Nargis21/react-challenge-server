@@ -12,6 +12,14 @@ const UserSchema = new Schema<IUser, UserModel>(
       type: String,
       default: 'user',
     },
+    challenges: [{
+      challengeId: {type: String, required: true},
+      title: {type: String, required: true},
+      challengeCategory: {type: String, required: true},
+      files: {type: String, required: true},
+      description: {type: String, required: true},
+      difficultyLevel: {type: String, required: true},
+    }]
   },
   {
     timestamps: true,
