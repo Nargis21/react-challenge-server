@@ -1,32 +1,25 @@
 import { Schema, model } from 'mongoose';
-import { BookModel, IBook } from './book.interface';
+import { ChallengeModel, IChallenge } from './challenge.interface';
 
-const BookSchema = new Schema<IBook>(
+const ChallengeSchema = new Schema<IChallenge>(
   {
     title: {
       type: String,
       required: true,
     },
-    author: {
+    category: {
       type: String,
       required: true,
     },
-    genre: {
+    difficulty: {
       type: String,
       required: true,
     },
-    publicationDate: {
+    description: {
       type: String,
       required: true,
     },
-    image: {
-      type: String,
-      required: true,
-    },
-    reviews: {
-      type: [String],
-    },
-    owner: {
+    files: {
       type: String,
       required: true,
     },
@@ -36,4 +29,7 @@ const BookSchema = new Schema<IBook>(
   }
 );
 
-export const Book = model<IBook, BookModel>('Book', BookSchema);
+export const Challenge = model<IChallenge, ChallengeModel>(
+  'Challenge',
+  ChallengeSchema
+);

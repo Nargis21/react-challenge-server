@@ -4,6 +4,7 @@ import { Document, Model } from 'mongoose';
 export type IUser = Document & {
   email: string;
   role: 'user' | 'admin';
+  challenges: Array<object>;
 };
 
 export type IUserResponse = {

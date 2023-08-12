@@ -1,5 +1,5 @@
 import { Model, Types } from 'mongoose';
-import { IBook } from '../book/book.interface';
+import { IBook } from '../challenge/challenge.interface';
 
 export type ICurrentList = {
   email: string;
