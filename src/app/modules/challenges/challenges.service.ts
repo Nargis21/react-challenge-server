@@ -28,7 +28,14 @@ const getChallengeById = async (id: string, userId: string): Promise<IChallenge|
       }
     })
 
-    return challenge
+    if(challenge){
+      return challenge
+    }else{
+      const result = await Challenge.findById(id);
+      return result; 
+    }
+
+    
   }else{
     const result = await Challenge.findById(id);
     return result;
