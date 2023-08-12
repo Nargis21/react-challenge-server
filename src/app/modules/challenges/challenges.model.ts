@@ -6,6 +6,7 @@ const ChallengeSchema = new Schema<IChallenge>(
     title: {
       type: String,
       required: true,
+      unique: true
     },
     challengeCategory: {
       type: String,

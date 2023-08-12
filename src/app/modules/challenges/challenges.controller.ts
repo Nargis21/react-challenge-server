@@ -29,7 +29,8 @@ const getAllChallenges = catchAsync(async (req: Request, res: Response) => {
 
 const getChallengeById = catchAsync(async (req: Request, res: Response) => {
   const challengeId = req.params.id
-  const result = await ChallengeService.getChallengeById(challengeId);
+  const userId = req?.user?._id
+  const result = await ChallengeService.getChallengeById(challengeId, userId);
   sendResponse<IChallenge | null>(res, {
     success: true,
     statusCode: httpStatus.OK,

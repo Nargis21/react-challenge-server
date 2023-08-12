@@ -2,7 +2,7 @@ import express from 'express'
 import validateRequest from '../../middlewares/validateRequest'
 import { ChallengeValidation } from './challenges.validation'
 import { ChallengeController } from './challenges.controller'
-import auth from '../../middlewares/auth'
+import auth, {userOrNull} from '../../middlewares/auth'
 
 const router = express.Router();
 
@@ -14,7 +14,7 @@ router.post(
 );
 
 router.get('/', ChallengeController.getAllChallenges);
-router.get('/:id', ChallengeController.getChallengeById);
+router.get('/:id', userOrNull(), ChallengeController.getChallengeById);
 
 router.delete('/:id', auth(), ChallengeController.deleteChallenge);
 

@@ -2,7 +2,7 @@
 import { Secret } from 'jsonwebtoken';
 import ApiError from '../../../errors/ApiError';
 import { jwtHelpers } from '../../../helpers/jwtHelpers';
-import { IUser } from './user.interface';
+import { IUser, IUserChallenge } from './user.interface';
 import { User } from './user.model';
 import config from '../../../config';
 
@@ -38,7 +38,77 @@ const checkAdmin = async (email: string) => {
   return { admin: isAdmin };
 };
 
+const getUserChallenges = async (userId: string) => {
+  const result = await User.findById(userId)
+  return result
+}
+
+const getUserChallengeById = async (userId: string, challengeId: string) => {
+  const result = await User.findById(userId)
+
+  const challenge = result?.challenges?.find(challenge => {
+    if(challenge?.challengeId === challengeId){
+      return challenge
+    }
+  })
+
+  return challenge
+
+}
+
+const addUserChallenge = async (challengeData: IUserChallenge, userId: string) => {
+  // find the user
+  const result = await User.findById(userId)
+
+  // check if challenge exist
+  const challengeId = challengeData?.challengeId
+
+  const challenge = result?.challenges?.find(challenge => {
+    if(challenge?.challengeId === challengeId){
+      return challenge
+    }
+  })
+  if(challenge){
+    // update the files
+    const updateChallenge = await User.findByIdAndUpdate(
+      {_id: userId},
+      {
+        $set: {
+          "challenges.$[item].files": challengeData?.files
+        }
+      },
+      {
+        arrayFilters: [{"item.challengeId": challengeId}]
+      }
+    )
+    if(!updateChallenge){
+      throw new ApiError(400, 'Failed to create challenge!');
+    }
+
+    return updateChallenge
+  }else{
+    // add new challenge into challenges
+    const addChallenge = await User.findByIdAndUpdate(
+      {_id: userId},
+      {
+        $addToSet: {
+          "challenges": challengeData
+        }
+      }
+    )
+    if(!addChallenge){
+      throw new ApiError(400, 'Failed to create challenge!');
+    }
+
+    return addChallenge
+  }
+
+}
+
 export const UserService = {
   userAuth,
   checkAdmin,
+  addUserChallenge,
+  getUserChallenges,
+  getUserChallengeById
 };
