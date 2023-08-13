@@ -11,7 +11,8 @@ export const userOrNull =
     try {
       //get authorization token
       const token = req.headers.authorization;
-      if (!token) {
+      console.log('token : ', token)
+      if (token === 'Bearer null' || token === null || token === undefined) {
         req.user = null;
       }else{
       //verify token
