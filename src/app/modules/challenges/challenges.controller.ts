@@ -50,9 +50,22 @@ const deleteChallenge = catchAsync(async (req: Request, res: Response) => {
   })
 })
 
+const updateChallengeById = catchAsync(async (req: Request, res: Response) => {
+  const challengeId = req.params.id
+  const data = req.body
+  const result = await ChallengeService.updateChallenge(challengeId, data)
+  sendResponse<IChallenge | null>(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'Challenge Updated successfully',
+    data: result,
+  })
+})
+
 export const ChallengeController = {
   createChallenge,
   getAllChallenges,
   getChallengeById,
-  deleteChallenge
+  deleteChallenge,
+  updateChallengeById
 }

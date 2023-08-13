@@ -20,21 +20,27 @@ router.get(
 
 router.get(
   '/challenge',
-  auth(),
+  auth(ENUM_USER_ROLE.USER),
   UserController.getAllUserChallenges
 )
 
 router.post(
   '/challenge',
-  auth(),
+  auth(ENUM_USER_ROLE.USER),
   validateRequest(UserValidation.UserChallengeZodSchema),
   UserController.saveUserChallenge
 )
 
 router.get(
   '/challenge/:id',
-  auth(),
+  auth(ENUM_USER_ROLE.USER),
   UserController.getChallengeById
+)
+
+router.delete(
+  '/challenge/:id',
+  auth(ENUM_USER_ROLE.USER),
+  UserController.deleteChallengeById
 )
 
 export const UserRoutes = router;

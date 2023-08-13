@@ -66,10 +66,23 @@ const getChallengeById = catchAsync(async (req: Request, res: Response) => {
   })
 })
 
+const deleteChallengeById = catchAsync(async (req: Request, res: Response) => {
+  const userId = req?.user?._id
+  const userChallengeId = req.params.id
+  const result = await UserService.deleteChallengeById(userId, userChallengeId);
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'User Challenges deleted successfully',
+    data: result,
+  })
+})
+
 export const UserController = {
   userAuth,
   checkAdmin,
   saveUserChallenge,
   getAllUserChallenges,
-  getChallengeById
+  getChallengeById,
+  deleteChallengeById
 };

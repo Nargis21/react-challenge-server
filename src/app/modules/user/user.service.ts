@@ -5,6 +5,7 @@ import { jwtHelpers } from '../../../helpers/jwtHelpers';
 import { IUser, IUserChallenge } from './user.interface';
 import { User } from './user.model';
 import config from '../../../config';
+import mongoose from 'mongoose';
 
 const userAuth = async (user: IUser) => {
   let userInfo;
@@ -53,6 +54,21 @@ const getUserChallengeById = async (userId: string, challengeId: string) => {
   })
 
   return challenge
+
+}
+
+const deleteChallengeById = async (userId: string, userChallengeId: string) => {
+  const result = await User.updateOne(
+    {_id: userId},
+    {
+      $pull: {
+        "challenges": {"_id": userChallengeId}
+      }
+    },
+    {safe: true}
+    )
+
+  return result
 
 }
 
@@ -110,5 +126,6 @@ export const UserService = {
   checkAdmin,
   addUserChallenge,
   getUserChallenges,
-  getUserChallengeById
+  getUserChallengeById,
+  deleteChallengeById
 };
