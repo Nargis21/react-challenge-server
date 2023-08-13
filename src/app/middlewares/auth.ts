@@ -11,32 +11,32 @@ export const userOrNull =
     try {
       //get authorization token
       const token = req.headers.authorization;
-      console.log('token : ', token)
       if (token === 'Bearer null' || token === null || token === undefined) {
         req.user = null;
-      }else{
-      //verify token
-      const verifiedUser = jwtHelpers.verifyToken(
-        token,
-        config.jwt.secret as Secret
-      );
-      req.user = verifiedUser;
-     
-      //protect by role
-      if (requiredRoles.length && !requiredRoles.includes(verifiedUser.role)) {
-        throw new ApiError(httpStatus.FORBIDDEN, 'You are not permitted');
-      }
+      } else {
+        //verify token
+        const verifiedUser = jwtHelpers.verifyToken(
+          token,
+          config.jwt.secret as Secret
+        );
+        req.user = verifiedUser;
 
+        //protect by role
+        if (
+          requiredRoles.length &&
+          !requiredRoles.includes(verifiedUser.role)
+        ) {
+          throw new ApiError(httpStatus.FORBIDDEN, 'You are not permitted');
+        }
       }
 
       next();
-
     } catch (error) {
       next(error);
     }
   };
 
-  const auth =
+const auth =
   (...requiredRoles: string[]) =>
   async (req: Request, res: Response, next: NextFunction) => {
     try {

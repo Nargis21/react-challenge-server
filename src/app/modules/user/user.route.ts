@@ -20,27 +20,27 @@ router.get(
 
 router.get(
   '/challenge',
-  auth(ENUM_USER_ROLE.USER),
+  auth(ENUM_USER_ROLE.USER, ENUM_USER_ROLE.ADMIN),
   UserController.getAllUserChallenges
-)
+);
 
 router.post(
   '/challenge',
-  auth(ENUM_USER_ROLE.USER),
+  auth(ENUM_USER_ROLE.USER, ENUM_USER_ROLE.ADMIN),
   validateRequest(UserValidation.UserChallengeZodSchema),
   UserController.saveUserChallenge
-)
+);
 
 router.get(
   '/challenge/:id',
-  auth(ENUM_USER_ROLE.USER),
+  auth(ENUM_USER_ROLE.USER, ENUM_USER_ROLE.ADMIN),
   UserController.getChallengeById
-)
+);
 
 router.delete(
   '/challenge/:id',
-  auth(ENUM_USER_ROLE.USER),
+  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
   UserController.deleteChallengeById
-)
+);
 
 export const UserRoutes = router;

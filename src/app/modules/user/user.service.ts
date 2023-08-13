@@ -5,7 +5,6 @@ import { jwtHelpers } from '../../../helpers/jwtHelpers';
 import { IUser, IUserChallenge } from './user.interface';
 import { User } from './user.model';
 import config from '../../../config';
-import mongoose from 'mongoose';
 
 const userAuth = async (user: IUser) => {
   let userInfo;
@@ -40,86 +39,86 @@ const checkAdmin = async (email: string) => {
 };
 
 const getUserChallenges = async (userId: string) => {
-  const result = await User.findById(userId)
-  return result
-}
+  const result = await User.findById(userId);
+  return result;
+};
 
 const getUserChallengeById = async (userId: string, challengeId: string) => {
-  const result = await User.findById(userId)
+  const result = await User.findById(userId);
 
   const challenge = result?.challenges?.find(challenge => {
-    if(challenge?.challengeId === challengeId){
-      return challenge
+    if (challenge?.challengeId === challengeId) {
+      return challenge;
     }
-  })
+  });
 
-  return challenge
-
-}
+  return challenge;
+};
 
 const deleteChallengeById = async (userId: string, userChallengeId: string) => {
   const result = await User.updateOne(
-    {_id: userId},
+    { _id: userId },
     {
       $pull: {
-        "challenges": {"_id": userChallengeId}
-      }
+        challenges: { challengeId: userChallengeId },
+      },
     },
-    {safe: true}
-    )
+    { safe: true }
+  );
 
-  return result
+  return result;
+};
 
-}
-
-const addUserChallenge = async (challengeData: IUserChallenge, userId: string) => {
+const addUserChallenge = async (
+  challengeData: IUserChallenge,
+  userId: string
+) => {
   // find the user
-  const result = await User.findById(userId)
+  const result = await User.findById(userId);
 
   // check if challenge exist
-  const challengeId = challengeData?.challengeId
+  const challengeId = challengeData?.challengeId;
 
   const challenge = result?.challenges?.find(challenge => {
-    if(challenge?.challengeId === challengeId){
-      return challenge
+    if (challenge?.challengeId === challengeId) {
+      return challenge;
     }
-  })
-  if(challenge){
+  });
+  if (challenge) {
     // update the files
     const updateChallenge = await User.findByIdAndUpdate(
-      {_id: userId},
+      { _id: userId },
       {
         $set: {
-          "challenges.$[item].files": challengeData?.files
-        }
+          'challenges.$[item].files': challengeData?.files,
+        },
       },
       {
-        arrayFilters: [{"item.challengeId": challengeId}]
+        arrayFilters: [{ 'item.challengeId': challengeId }],
       }
-    )
-    if(!updateChallenge){
+    );
+    if (!updateChallenge) {
       throw new ApiError(400, 'Failed to create challenge!');
     }
 
-    return updateChallenge
-  }else{
+    return updateChallenge;
+  } else {
     // add new challenge into challenges
     const addChallenge = await User.findByIdAndUpdate(
-      {_id: userId},
+      { _id: userId },
       {
         $addToSet: {
-          "challenges": challengeData
-        }
+          challenges: challengeData,
+        },
       }
-    )
-    if(!addChallenge){
+    );
+    if (!addChallenge) {
       throw new ApiError(400, 'Failed to create challenge!');
     }
 
-    return addChallenge
+    return addChallenge;
   }
-
-}
+};
 
 export const UserService = {
   userAuth,
@@ -127,5 +126,5 @@ export const UserService = {
   addUserChallenge,
   getUserChallenges,
   getUserChallengeById,
-  deleteChallengeById
+  deleteChallengeById,
 };
