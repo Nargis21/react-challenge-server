@@ -52,9 +52,20 @@ const deleteChallenge = async (id: string): Promise<IChallenge | null> => {
   return result;
 }
 
+const updateChallenge = async (id: string, data: IChallenge): Promise<IChallenge | null> => {
+  const challenge = await Challenge.findOneAndUpdate({_id: id},{$set:data},{new:true})
+  if(!challenge){
+    throw new ApiError(httpStatus.NOT_FOUND, 'Challenge Not Updated');
+  }
+
+  return challenge;
+}
+
+
 export const ChallengeService = {
   getAllChallenges,
   createChallenge,
   getChallengeById,
-  deleteChallenge
+  deleteChallenge,
+  updateChallenge
 }
